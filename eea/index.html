@@ -23,9 +23,11 @@
   </head>
   <body>
     <h1>Erweiterter euklidischer Algorithmus (EEA) Generator</h1>
-    a: <input id="a"></input><br>
-    b: <input id="b"></input><br>
-    <button onclick="tableCreate('')">Generate Table</button><br>
+    <form action="" method="GET">
+      a: <input id="a" type="text" name="a" placeholder="a"><br>
+      b: <input id="b" type="text" name="b" placeholder="b"><br>
+      <button type="submit" id="submit" onclick="tableCreate('')">Generier Tabelle</button>
+    </form>
     <div id="erg"></div>
     <table id="table">
     </table>
@@ -83,9 +85,15 @@
         const solution = input_a * a + input_b * b
         erg.innerHTML = solution + " = ggt(" + input_a + ", " + input_b + ") ≛ " + input_a  + " * " + a + " + " +  input_b + " * " + b + " = " + solution
     }
+    const url = new URL(window.location)
+    const a_value = url.searchParams.get("a")
+    const b_value = url.searchParams.get("b")
     const a_input = document.getElementById("a")
     const b_input = document.getElementById("b")
     a_input.addEventListener('change', tableCreate)
     b_input.addEventListener('change', tableCreate)
-  </script>
+    a_input.value = a_value
+    b_input.value = b_value
+    tableCreate('')
+                  </script>
 </html>
