@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      table, th, td {
+          border-left: 1px solid black;
+          border-right: 1px solid black;
+          border-collapse: collapse;
+          text-align: center;
+      }
+      button {
+          margin-left: 15px;
+      }
+      #erg {
+          font-weight: bold;
+          padding: 10px;
+      }
+      table {
+          margin: 10px;
+      }
+    </style>
+    <title>Erweiterter euklidischer Algorithmus (EEA) Generator</title>
+  </head>
+  <body>
+    <h1>Erweiterter euklidischer Algorithmus (EEA) Generator</h1>
+    a: <input id="a"></input><br>
+    b: <input id="b"></input><br>
+    <button onclick="tableCreate('')">Generate Table</button><br>
+    <div id="erg"></div>
+    <table id="table">
+    </table>
+
+  </body>
+  <script>
+    function tableCreate(e) {
+	    let a = document.getElementById("a").value
+        const input_a = a
+	    let b = document.getElementById("b").value
+        const input_b = b
+        const body = document.body,
+              tbl = document.getElementById("table")
+        tbl.innerHTML = '<tr>\
+          <th class="">a</th>\
+          <th class="">b</th>\
+          <th class="">⎣b/a⎦</th>\
+          <th class="">α</th>\
+          <th class="">β</th>\
+        </tr>\
+        <tr style="border-bottom:1px solid black">\
+          <td colspan="100%"></td>\
+        </tr>';
+        let rows = []
+ 	    let abs = []
+        while (a > 0) {
+            let row = tbl.insertRow()
+            row.insertCell().appendChild(document.createTextNode(a))
+            row.insertCell().appendChild(document.createTextNode(b))
+		    let ab = Math.floor(b/a)
+            abs.push(ab)
+            row.insertCell().appendChild(document.createTextNode(ab))
+            rows.push(row)
+            let tmp = a
+            a = b % a
+            b = tmp
+        }
+        a = 1
+        b = 0
+        abs.pop()
+        while (abs.length != 0) {
+            let row = rows.pop()
+            row.insertCell().appendChild(document.createTextNode(a))
+            row.insertCell().appendChild(document.createTextNode(b))
+            let tmp = a
+            a = b - (abs.pop() * a)
+            b = tmp
+        }
+        let row = rows.pop()
+        row.insertCell().appendChild(document.createTextNode(a))
+        row.insertCell().appendChild(document.createTextNode(b))
+        body.appendChild(tbl)
+
+        const erg = document.getElementById("erg")
+        const solution = input_a * a + input_b * b
+        erg.innerHTML = solution + " = ggt(" + input_a + ", " + input_b + ") ≛ " + input_a  + " * " + a + " + " +  input_b + " * " + b + " = " + solution
+    }
+    const a_input = document.getElementById("a")
+    const b_input = document.getElementById("b")
+    a_input.addEventListener('change', tableCreate)
+    b_input.addEventListener('change', tableCreate)
+  </script>
+</html>
