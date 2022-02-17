@@ -114,10 +114,9 @@ class PermutationCalculator {
   }
 
   /**
-   * This calculates g○f for the numbers 1 to highestNumber
+   * This calculates g○f
    * @param {string} g A string containing all permutations of g separated by spaces, eg: "Id (1,7)(6,8) (1,7)(3,4)(6,8) (3,4)"
    * @param {string} f A string containing all permutations of f separated by spaces, eg: "Id (1,7)(6,8) (1,7)(3,4)(6,8) (3,4)"
-   * @param {int} highestNumber The highest number which should be handled, in the above example this could be 8
    * @returns Array of rows with the human visualization of the resulting permutation
    */
   static composePermutation(g, f) {
