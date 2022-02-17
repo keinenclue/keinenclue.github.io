@@ -24,7 +24,12 @@ class PermutationCalculator {
    * @returns An array of permutations
    */
   static #parsePermutationsString(permutationsString) {
-    return permutationsString.split(" ");
+    return permutationsString.split(") (").map(permutation => {
+      if(!permutation.startsWith("(")) permutation = "(" + permutation;
+      if(!permutation.endsWith(")")) permutation = permutation + ")";
+
+      return permutation.replaceAll(" ", "")
+    });
   }
 
   /**
