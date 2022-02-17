@@ -98,12 +98,13 @@
         event.preventDefault();
 
         const form = document.getElementById("form");
+        if(event.target != null) {
+          form.classList.add("was-validated");
+        }
         if (!form.checkValidity()) {
             return;
         }
-        else {
-            form.classList.add("was-validated");
-        }
+        
         const formData = new FormData(form);
 
         const f = formData.get("f");
