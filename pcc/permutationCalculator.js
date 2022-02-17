@@ -41,7 +41,6 @@ class PermutationCalculator {
       	permutationsString = permutationsString.substring(1)
       }
       else {
-        console.log("C: ", char, " p: ", permutationsString)
         if(char === "(") {
           currentlyInPermutation = true
           permutations.push("")
