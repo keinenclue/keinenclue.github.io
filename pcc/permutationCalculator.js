@@ -24,12 +24,39 @@ class PermutationCalculator {
    * @returns An array of permutations
    */
   static #parsePermutationsString(permutationsString) {
-    return permutationsString.split(") (").map(permutation => {
-      if(!permutation.startsWith("(")) permutation = "(" + permutation;
-      if(!permutation.endsWith(")")) permutation = permutation + ")";
-
-      return permutation.replaceAll(" ", "")
-    });
+    const permutations = []
+    let currentlyInPermutation = false
+    
+    while(permutationsString.length > 0) {
+      let char = permutationsString.charAt(0)
+      
+      if(currentlyInPermutation) {
+        if(permutationsString.startsWith(") ")) {
+          currentlyInPermutation = false
+        }
+        if(char !== " ") {
+          permutations[permutations.length - 1] += char
+        }
+        
+      	permutationsString = permutationsString.substring(1)
+      }
+      else {
+        console.log("C: ", char, " p: ", permutationsString)
+        if(char === "(") {
+          currentlyInPermutation = true
+          permutations.push("")
+        }
+        else if(permutationsString.startsWith("Id ") || permutationsString == "Id") {
+          permutations.push("Id")
+          permutationsString = permutationsString.substring(3)
+        }
+        else {
+          permutationsString = permutationsString.substring(1)
+        }
+      }
+    }
+    
+    return permutations
   }
 
   /**
@@ -112,10 +139,13 @@ class PermutationCalculator {
    * @returns The highest number
    */
   static #findHighestNumber(string) {
-    return string.match(/[0-9]+/g)
+    const numbers = string.match(/[0-9]+/g)
+    return numbers ?
+      numbers
       .map(Number)
       .sort()
       .pop()
+      :0
   }
 
   /**
