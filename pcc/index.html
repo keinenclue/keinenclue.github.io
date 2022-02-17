@@ -10,7 +10,7 @@
       rel="stylesheet"
       integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
       crossorigin="anonymous"
-    />
+      />
     <style>
       table, th, td {
           border-left: 1px solid black;
@@ -25,7 +25,7 @@
       <div class="px-4 py-5 my-5 text-center">
         <h1 class="display-5 fw-bold">PCC</h1>
         <div class="mx-auto">
-          Permutation composition calculator - A simple tool for calculating f○g ("f after g")
+          Permutation composition calculator - A simple tool for calculating f∘g ("f after g")
         </div>
       </div>
       <div class="container">
@@ -33,36 +33,37 @@
           <div class="card-body">
             <form id="form" class="needs-validation" novalidate>
               <div class="mb-3">
-                <label for="fInput" class="form-label"
-                  >f (all permutations separated by spaces, use "Id" for the
-                  identity)</label
-                >
+                <label for="fInput" class="form-label">
+                  f (all permutations separated by spaces, use "Id" for theidentity)
+                </label>
                 <div class="input-group has-validation">
                   <input
+                    id="f"
                     type="text"
                     class="form-control"
                     name="f"
                     placeholder="(1,7)(6,8) (1,7)(3,4)(6,8) (3,4)"
                     pattern="(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)) )*(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)))"
                     required
-                  />
+                    />
                   <div class="invalid-feedback">g is not valid</div>
                 </div>
               </div>
 
               <div class="mb-3">
-                <label for="gInput" class="form-label"
-                  >g (leave empty to copy from f)</label
-                >
+                <label for="gInput" class="form-label">
+                  g (leave empty to copy from f)
+                </label>
                 <div class="input-group has-validation">
-                <input
-                  type="text"
-                  class="form-control"
-                  name="g"
-                  placeholder="(1,7)(6,8) (1,7)(3,4)(6,8) (3,4)"
-                  pattern="(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)) )*(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)))"
-                />
-                <div class="invalid-feedback">f is not valid</div>
+                  <input
+                    id="g"
+                    type="text"
+                    class="form-control"
+                    name="g"
+                    placeholder="(1,7)(6,8) (1,7)(3,4)(6,8) (3,4)"
+                    pattern="(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)) )*(((((\(([0-9]+,[ ]*)+[0-9]+\)))+)|(Id)))"
+                    />
+                  <div class="invalid-feedback">f is not valid</div>
                 </div>
               </div>
 
@@ -88,34 +89,51 @@
     src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
     crossorigin="anonymous"
-  ></script>
+    ></script>
   <script src="permutationCalculator.js"></script>
   <script src="../static/table.js"></script>
   <script>
-    document.getElementById("form").onsubmit = function (event) {
-      event.preventDefault();
+    function generateTable(event) {
+        event.preventDefault();
 
-      const form = document.getElementById("form");
-      if (!form.checkValidity()) {
-        return;
-      }
-      else {
-        form.classList.add("was-validated");
-      }
-      const formData = new FormData(form);
+        const form = document.getElementById("form");
+        if (!form.checkValidity()) {
+            return;
+        }
+        else {
+            form.classList.add("was-validated");
+        }
+        const formData = new FormData(form);
 
-      const f = formData.get("f");
-      const g = formData.get("g") ? formData.get("g") : f;
+        const f = formData.get("f");
+        const g = formData.get("g") ? formData.get("g") : f;
 
-      const result = PermutationCalculator.composePermutation(g, f);
+        const result = PermutationCalculator.composePermutation(g, f);
 
-      console.table(result);
+        console.table(result);
 
-      const resultDiv = document.getElementById("resultDiv");
-      resultDiv.innerHTML = "";
-      resultDiv.appendChild(
-        Table.generate("f○g", result, ["table", "table-striped"])
-      );
+        const resultDiv = document.getElementById("resultDiv");
+        resultDiv.innerHTML = "";
+        resultDiv.appendChild(
+            Table.generate("f∘g", result, ["table", "table-striped"])
+        );
+        let params = "?f=" + f;
+        if (formData.get("g")) {
+            params += "&g=" + g;
+        }
+        window.history.pushState('', document.title, params);
     };
+
+    document.getElementById("form").onsubmit = generateTable;
+    const url = new URL(window.location);
+    const g_value = url.searchParams.get("g");
+    const f_value = url.searchParams.get("f");
+    const g_input = document.getElementById("g");
+    const f_input = document.getElementById("f");
+    g_input.addEventListener('change', generateTable)
+    f_input.addEventListener('change', generateTable)
+    g_input.value = g_value
+    f_input.value = f_value
+    generateTable(new Event('start'))
   </script>
 </html>
