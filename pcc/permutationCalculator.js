@@ -76,8 +76,9 @@ class PermutationCalculator {
   
           const clauseNumbers = clause.split(",").map((y) => parseInt(y));
   
-          for (let i = 0; i < clauseNumbers.length; i++)
+          for (let i = 0; i < clauseNumbers.length; i++){
             ret[clauseNumbers[i] - 1] = clauseNumbers[(i + 1) % clauseNumbers.length] - 1;
+          }
   
         }
       });
@@ -142,7 +143,7 @@ class PermutationCalculator {
       return numbers ?
         numbers
         .map(Number)
-        .sort()
+        .sort((a,b) => a-b)
         .pop()
         :0
     }
