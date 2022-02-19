@@ -1,0 +1,6 @@
+{
+    "prettier.configPath": ".prettierrc.json",
+    "editor.detectIndentation": false,
+    "editor.tabSize": 2,
+    "editor.insertSpaces": true
+}
