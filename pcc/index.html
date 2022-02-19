@@ -25,14 +25,48 @@
 
   <body>
     <main>
-      <div class="px-4 py-5 my-5 text-center">
-        <h1 class="display-5 fw-bold">PCC</h1>
-        <div class="mx-auto">
-          Permutation composition calculator - A simple tool for calculating f∘g
-          ("f after g")
+      <div class="container py-2">
+        <nav
+          class="navbar navbar-expand-lg navbar-light pb-3 mb-4 border-bottom"
+        >
+          <div class="container-fluid">
+            <a href="/" class="navbar-brand align-items-center d-flex">
+              <img height="32" class="me-2" src="../static/keinenclue.png" />
+              <span class="fs-4">KeinenClue</span>
+            </a>
+
+            <button
+              class="navbar-toggler"
+              type="button"
+              data-bs-toggle="collapse"
+              data-bs-target="#navbarTogglerDemo03"
+              aria-controls="navbarTogglerDemo03"
+              aria-expanded="false"
+              aria-label="Toggle navigation"
+            >
+              <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
+              <ul
+                class="navbar-nav ml-auto"
+                style="margin-left: auto !important"
+              >
+                <li class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="../"
+                    >Home</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </nav>
+        <div class="px-4 py-5 my-5 bg-light rounded-3 text-center">
+          <h1 class="display-5 fw-bold">PCC</h1>
+          <div class="mx-auto">
+            Permutation composition calculator - A simple tool for calculating
+            f∘g ("f after g")
+          </div>
         </div>
-      </div>
-      <div class="container">
         <div class="card mb-3">
           <div class="card-body">
             <form id="form" class="needs-validation" novalidate>
