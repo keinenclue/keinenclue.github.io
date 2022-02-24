@@ -2,3 +2,4 @@
 ### Math tools
 - [Extended Euclidean algorithm](eea)
 - [Permutation composition calculator](pcc)
+- [KNF Converter](knfc)
