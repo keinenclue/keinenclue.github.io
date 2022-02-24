@@ -140,28 +140,43 @@ class KnfConverter {
     );
   }
 
+  static replaceAlternativeCharacters(s) {
+    // GDW (¡ should be ↔)
+    s = s.replaceAll("\u00a1", "\u2194");
+
+    // Impli (æ should be →)
+    s = s.replaceAll("\u00e6", "\u2192");
+
+    // Or (, should be v)
+    s = s.replaceAll("\u002c", "\u0076");
+
+    // And (· should be ∧)
+    s = s.replaceAll("\u00b7", "\u2227");
+
+    return s;
+  }
+
   static toInternRepresentation(s) {
-    // Not
-    s = s.replaceAll("¬", "!");
+    s = KnfConverter.replaceAlternativeCharacters(s);
 
-    // GDW
-    s = s.replaceAll("↔", "<");
-    s = s.replaceAll("¡", "<");
+    // Not (¬)
+    s = s.replaceAll("\u00AC", "!");
 
-    // Impli
-    s = s.replaceAll("→", "-");
-    s = s.replaceAll("æ", "-");
+    // GDW (↔)
+    s = s.replaceAll("\u2194", "<");
 
-    // Or
-    s = s.replaceAll("v", "|");
-    s = s.replaceAll(",", "|");
+    // Impli (→)
+    s = s.replaceAll("\u2192", "-");
 
-    // And
-    s = s.replaceAll("∧", "&");
-    s = s.replaceAll("·", "&");
+    // Or (v)
+    s = s.replaceAll("\u0076", "|");
 
-    // Xor
-    s = s.replaceAll("⊕", "%");
+    // And (∧)
+    s = s.replaceAll("\u2227", "&");
+
+    // Xor (⊕)
+    s = s.replaceAll("\u2295", "%");
+
     return s;
   }
 
@@ -212,11 +227,6 @@ class KnfConverter {
     main.setIDRec("");
     return main;
   }
-
-  /*
-   * GDW = ↔ or ¡ NOT = ¬ or ¬ IMPLI = → or æ OR = ∨ or ‚ AND = ∧ or · XOR = ⊕ or
-   * ⊕
-   */
 
   // eg: (p v q) v ((l v (l v (l v m))) v (l v m))
   static convertToKnf(formula) {

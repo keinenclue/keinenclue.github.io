@@ -132,12 +132,17 @@
 
       const resultDiv = document.getElementById("resultDiv");
       resultDiv.innerHTML = "";
-      resultDiv.appendChild(
-        document.createTextNode(result.join(" "))
-      );
+      resultDiv.appendChild(document.createTextNode(result.join(" ")));
 
       let params = "?formula=" + formula;
       window.history.pushState("", document.title, params);
+    }
+
+    function replaceAlternativeCharacters(e) {
+      const formula_input = document.getElementById("formula");
+      formula_input.value = KnfConverter.replaceAlternativeCharacters(
+        formula_input.value
+      );
     }
 
     document.getElementById("form").onsubmit = convertKnf;
@@ -145,7 +150,13 @@
     const formula_value = url.searchParams.get("formula");
     const formula_input = document.getElementById("formula");
     formula_input.addEventListener("change", convertKnf);
+    for (event of "keypress change propertychange click keyup input paste".split(
+      " "
+    )) {
+      formula_input.addEventListener(event, replaceAlternativeCharacters);
+    }
     formula_input.value = formula_value;
+
     convertKnf(new Event("start"));
   </script>
 </html>
