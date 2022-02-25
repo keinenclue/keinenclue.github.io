@@ -174,7 +174,19 @@
         button.classList.add("btn", "btn-outline-secondary");
         button.innerHTML = special;
         button.onclick = () => {
-          formulaInput.value += special;
+          if (
+            formulaInput.selectionStart ||
+            formulaInput.selectionStart == "0"
+          ) {
+            const startPos = formulaInput.selectionStart;
+            const endPos = formulaInput.selectionEnd;
+            formulaInput.value =
+              formulaInput.value.substring(0, startPos) +
+              special +
+              formulaInput.value.substring(endPos, formulaInput.value.length);
+          } else {
+            formulaInput.value += special;
+          }
         };
         buttonRow.appendChild(button);
       }
