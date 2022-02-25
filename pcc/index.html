@@ -136,7 +136,6 @@
 
     function replacer(match) {
       charMap.set(match.charCodeAt(0), match);
-      console.log(match.charCodeAt(0));
       return match.charCodeAt(0);
     }
 
@@ -153,13 +152,14 @@
 
       const formData = new FormData(form);
 
-      var insertedF = formData.get("f");
-      var insertedG = formData.get("g") ? formData.get("g") : f;
+      const insertedF = formData.get("f");
+      const insertedG = formData.get("g") ? formData.get("g") : f;
 
-      f = insertedF.replace(/[A-Z]/g, replacer);
-      g = insertedG.replace(/[A-Z]/g, replacer);
+      f = insertedF.replace(/[A-Z](?!d)/g, replacer);
+      g = insertedG.replace(/[A-Z](?!d)/g, replacer);
 
-      var result = PermutationCalculator.composePermutation(g, f);
+      let result = PermutationCalculator.composePermutation(g, f);
+
       if (charMap.size != 0) {
         result = JSON.parse(
           JSON.stringify(result).replace(/\d+/g, (match) =>
