@@ -149,6 +149,7 @@ class KnfConverter {
 
     // Or (, should be v)
     s = s.replaceAll("\u002c", "\u0076");
+    s = s.replaceAll("\u201a", "\u0076");
 
     // And (· should be ∧)
     s = s.replaceAll("\u00b7", "\u2227");
