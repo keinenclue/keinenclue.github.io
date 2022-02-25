@@ -86,6 +86,8 @@
                 </div>
               </div>
 
+              <div class="btn-group mb-3" role="group" id="buttonRow"></div>
+
               <div class="">
                 <button type="submit" class="btn btn-primary">Calculate</button>
               </div>
@@ -124,11 +126,12 @@
   <script src="knfConverter.js"></script>
   <script src="../static/table.js"></script>
   <script>
-    function convertKnf(event) {
-      event.preventDefault();
+    const form = document.getElementById("form");
+    const formulaInput = document.getElementById("formula");
 
-      const form = document.getElementById("form");
-      if (event.target != null) {
+    function convertKnf(event = null) {
+      if (event) {
+        event.preventDefault();
         form.classList.add("was-validated");
       }
       if (!form.checkValidity()) {
@@ -136,18 +139,14 @@
       }
 
       const formData = new FormData(form);
-
-      const formula = formData.get("formula");
-      let params = "?formula=" + formula;
-      window.history.pushState("", document.title, params);
+      storeParametersInUrl(formData);
 
       const resultDiv = document.getElementById("resultDiv");
+      const resultAlert = document.getElementById("resultAlert");
       resultDiv.innerHTML = "";
 
-      const resultAlert = document.getElementById("resultAlert");
-
       try {
-        const result = KnfConverter.convertToKnf(formula);
+        const result = KnfConverter.convertToKnf(formData.get("formula"));
         resultDiv.appendChild(document.createTextNode(result.join(" ")));
         resultAlert.classList.add("d-none");
         resultDiv.classList.remove("d-none");
@@ -165,19 +164,66 @@
       );
     }
 
-    document.getElementById("form").onsubmit = convertKnf;
-    const url = new URL(window.location);
-    const formula_value = url.searchParams.get("formula");
-    const formula_input = document.getElementById("formula");
-    formula_input.value = formula_value;
+    function populateButtonRow() {
+      const buttonRow = document.getElementById("buttonRow");
+      for (const [special, _] of Object.entries(
+        KnfConverter.symbolMappings()
+      )) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("btn", "btn-outline-secondary");
+        button.innerHTML = special;
+        button.onclick = () => {
+          if (
+            formulaInput.selectionStart ||
+            formulaInput.selectionStart == "0"
+          ) {
+            const startPos = formulaInput.selectionStart;
+            const endPos = formulaInput.selectionEnd;
+            formulaInput.value =
+              formulaInput.value.substring(0, startPos) +
+              special +
+              formulaInput.value.substring(endPos, formulaInput.value.length);
 
-    formula_input.addEventListener("change", convertKnf);
-    for (event of "keypress change propertychange click keyup input paste".split(
-      " "
-    )) {
-      formula_input.addEventListener(event, replaceAlternativeCharacters);
+            formulaInput.focus();
+            formulaInput.setSelectionRange(startPos + 1, startPos + 1);
+          } else {
+            formulaInput.value += special;
+            formulaInput.focus();
+          }
+        };
+        buttonRow.appendChild(button);
+      }
     }
 
-    convertKnf(new Event("start"));
+    function addEventListeners() {
+      form.addEventListener("submit", convertKnf);
+      formulaInput.addEventListener("change", convertKnf);
+      for (event of "keypress change propertychange click keyup input paste".split(
+        " "
+      )) {
+        formulaInput.addEventListener(event, replaceAlternativeCharacters);
+      }
+    }
+
+    function restoreParametersFromUrl() {
+      const url = new URL(window.location);
+      for (let p of url.searchParams) {
+        form[p[0]].value = p[1];
+      }
+    }
+
+    function storeParametersInUrl(formData) {
+      window.history.pushState(
+        "",
+        document.title,
+        "?" + new URLSearchParams(formData.entries())
+      );
+    }
+
+    populateButtonRow();
+    addEventListeners();
+    restoreParametersFromUrl();
+    convertKnf();
   </script>
 </html>

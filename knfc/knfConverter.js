@@ -159,25 +159,35 @@ class KnfConverter {
   static toInternRepresentation(s) {
     s = KnfConverter.replaceAlternativeCharacters(s);
 
-    // Not (¬)
-    s = s.replaceAll("\u00AC", "!");
-
-    // GDW (↔)
-    s = s.replaceAll("\u2194", "<");
-
-    // Impli (→)
-    s = s.replaceAll("\u2192", "-");
-
-    // Or (v)
-    s = s.replaceAll("\u0076", "|");
-
-    // And (∧)
-    s = s.replaceAll("\u2227", "&");
-
-    // Xor (⊕)
-    s = s.replaceAll("\u2295", "%");
+    for (const [special, internal] of Object.entries(
+      KnfConverter.symbolMappings()
+    )) {
+      s = s.replaceAll(special, internal);
+    }
 
     return s;
+  }
+
+  static symbolMappings() {
+    return {
+      // Not (¬)
+      "\u00AC": "!",
+
+      // GDW (↔)
+      "\u2194": "<",
+
+      // Impli (→)
+      "\u2192": "-",
+
+      // Or (v)
+      "\u0076": "|",
+
+      // And (∧)
+      "\u2227": "&",
+
+      // Xor (⊕)
+      "\u2295": "%",
+    };
   }
 
   static generateSyntaxTree(s) {
