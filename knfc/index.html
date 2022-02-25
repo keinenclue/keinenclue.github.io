@@ -80,7 +80,6 @@
                     class="form-control"
                     name="formula"
                     placeholder="p v q"
-                    pattern=".*"
                     required
                   />
                   <div class="invalid-feedback">formula is not valid</div>
@@ -96,6 +95,18 @@
 
         <div class="card mb-3">
           <div class="card-body">
+            <div
+              class="alert alert-danger mb-0 d-none"
+              id="resultAlert"
+              role="alert"
+            >
+              <b>Invalid formula!</b> If you think, this should have worked,
+              please
+              <a
+                href="https://github.com/keinenclue/keinenclue.github.io/issues/new"
+                >open an issue on github</a
+              >.
+            </div>
             <div class="table-responsive" id="resultDiv">
               Result will be here
             </div>
@@ -127,15 +138,24 @@
       const formData = new FormData(form);
 
       const formula = formData.get("formula");
-
-      const result = KnfConverter.convertToKnf(formula);
+      let params = "?formula=" + formula;
+      window.history.pushState("", document.title, params);
 
       const resultDiv = document.getElementById("resultDiv");
       resultDiv.innerHTML = "";
-      resultDiv.appendChild(document.createTextNode(result.join(" ")));
 
-      let params = "?formula=" + formula;
-      window.history.pushState("", document.title, params);
+      const resultAlert = document.getElementById("resultAlert");
+
+      try {
+        const result = KnfConverter.convertToKnf(formula);
+        resultDiv.appendChild(document.createTextNode(result.join(" ")));
+        resultAlert.classList.add("d-none");
+        resultDiv.classList.remove("d-none");
+      } catch (e) {
+        resultDiv.appendChild(document.createTextNode(""));
+        resultAlert.classList.remove("d-none");
+        resultDiv.classList.add("d-none");
+      }
     }
 
     function replaceAlternativeCharacters(e) {
@@ -149,13 +169,14 @@
     const url = new URL(window.location);
     const formula_value = url.searchParams.get("formula");
     const formula_input = document.getElementById("formula");
+    formula_input.value = formula_value;
+
     formula_input.addEventListener("change", convertKnf);
     for (event of "keypress change propertychange click keyup input paste".split(
       " "
     )) {
       formula_input.addEventListener(event, replaceAlternativeCharacters);
     }
-    formula_input.value = formula_value;
 
     convertKnf(new Event("start"));
   </script>
