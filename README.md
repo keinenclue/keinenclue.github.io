@@ -3,6 +3,7 @@
 - [Extended Euclidean algorithm](eea)
 - [Permutation composition calculator](pcc)
 - [KNF Converter](knfc)
+- [Group Opervations](gop)
 
 ### Related tools
 - [Truth-table-tool](https://web.stanford.edu/class/cs103/tools/truth-table-tool/)
