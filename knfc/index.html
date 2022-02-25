@@ -184,8 +184,12 @@
               formulaInput.value.substring(0, startPos) +
               special +
               formulaInput.value.substring(endPos, formulaInput.value.length);
+
+            formulaInput.focus();
+            formulaInput.setSelectionRange(startPos + 1, startPos + 1);
           } else {
             formulaInput.value += special;
+            formulaInput.focus();
           }
         };
         buttonRow.appendChild(button);
