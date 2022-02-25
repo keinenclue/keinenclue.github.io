@@ -86,6 +86,13 @@
                 </div>
               </div>
 
+              <div
+                class="btn-group mb-3"
+                role="group"
+                aria-label="Basic outlined example"
+                id="buttonRow"
+              ></div>
+
               <div class="">
                 <button type="submit" class="btn btn-primary">Calculate</button>
               </div>
@@ -177,6 +184,24 @@
     )) {
       formula_input.addEventListener(event, replaceAlternativeCharacters);
     }
+
+    function populateButtonRow() {
+      const buttonRow = document.getElementById("buttonRow");
+      for (const [special, _] of Object.entries(
+        KnfConverter.symbolMappings()
+      )) {
+        button = document.createElement("button");
+        button.type = "button";
+        button.classList.add("btn", "btn-outline-secondary");
+        button.innerHTML = special;
+        button.onclick = () => {
+          formula_input.value += special;
+        };
+        buttonRow.appendChild(button);
+      }
+    }
+
+    populateButtonRow();
 
     convertKnf(new Event("start"));
   </script>
